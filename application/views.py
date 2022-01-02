@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
+import requests
 from flask_login import login_required, logout_user, current_user
 
 from .forms import SendForm, AssetForm, FilterForm
@@ -73,13 +74,20 @@ def transactions():
 def assets():
     """Displays all assets owned by the user"""
     form = FilterForm()
-
+    token_data = []
     if form.validate_on_submit():
         assets_list = current_user.get_assets(form.substring.data)
     else:
         assets_list = current_user.get_assets("")
-
-    return render_template('assets.html', assets=assets_list, form=form)
+    for asset in assets_list:
+        try:
+            data = requests.get(asset["params"]["url"]).json()
+        except:
+            data = {}
+        token_data.append(data)
+    print(len(token_data))
+    print(len(assets_list))
+    return render_template('assets.html', assets=assets_list, token_data=token_data, form=form)
 
 
 @main_bp.route('/mnemonic')

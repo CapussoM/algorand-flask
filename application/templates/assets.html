@@ -16,7 +16,7 @@
         <th>Total</th>
         <th>Decimals</th>
         <th>Frozen</th>
-        <th>URL</th>
+        <th></th>
     </tr>
     {% for asset in assets %}
     <tr>
@@ -25,7 +25,7 @@
         <td>{{ asset.params.total }}</td>
         <td>{{ asset.params.decimals }}</td>
         <td>{{ asset.params.get('default-frozen') }}</td>
-        <td>{{ asset.params.url }}</td>
+        <td>{% if token_data[loop.index0] != {} %}<img width="100px" src="{{token_data[loop.index0]['image']}}" />{% else %}NO PIC{% endif %}</td>
     </tr>
     {% endfor %}
 </table>
